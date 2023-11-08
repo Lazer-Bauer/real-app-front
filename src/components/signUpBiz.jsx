@@ -1,22 +1,28 @@
 import PageHeader from "../common/pageHeader";
-import { useFormik } from "formik";
-import Joi from "joi";
 import Input from "../common/inputs";
+import SignUpForm from "./form";
+import usersService from "../services/userServices";
+import { useFormik } from "formik";
+
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
+import Joi from "joi";
 import { useAuth } from "../contexts/auth.context";
-const SignIn = ({ redirect }) => {
+
+const SignUpBiz = ({ redirect }) => {
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
-  const { user, login } = useAuth();
+
+  const { user, signUp, login } = useAuth();
   const form = useFormik({
     initialValues: {
+      name: "",
       email: "",
-
       password: "",
     },
     validate(values) {
       const schema = Joi.object({
+        name: Joi.string().min(6).max(255).required(),
         email: Joi.string()
           .min(2)
           .max(255)
@@ -40,7 +46,8 @@ const SignIn = ({ redirect }) => {
     async onSubmit(values) {
       console.log(values);
       try {
-        await login({ ...values });
+        await signUp({ ...values, biz: true });
+        await login({ email: values.email, password: values.password });
         if (redirect) {
           navigate(redirect);
         }
@@ -51,6 +58,7 @@ const SignIn = ({ redirect }) => {
       }
     },
   });
+
   if (user) {
     return <Navigate to="/" />;
   }
@@ -58,6 +66,13 @@ const SignIn = ({ redirect }) => {
     <>
       <form onSubmit={form.handleSubmit}>
         {serverError && <div className="alert alert-danger">{serverError}</div>}
+        <Input
+          error={form.touched.name && form.errors.name}
+          {...form.getFieldProps("name")}
+          label="Name"
+          type="name"
+          required
+        />
         <Input
           error={form.touched.email && form.errors.email}
           {...form.getFieldProps("email")}
@@ -72,9 +87,9 @@ const SignIn = ({ redirect }) => {
           type="password"
           required
         />
-        <button>Sign In</button>
+        <button>Sign Up business</button>
       </form>
     </>
   );
 };
-export default SignIn;
+export default SignUpBiz;

@@ -7,11 +7,11 @@ const Input = ({ label, error, ...rest }) => {
       <input
         {...rest}
         id={rest.name}
-        className={["form-control", rest.error && "is-invalid"]
+        className={["form-control", error && "is-invalid"]
           .filter(Boolean)
           .join(" ")}
       />
-      <span className="invalid-feedback">{rest.error}</span>
+      <span className="invalid-feedback">{error}</span>
     </div>
   );
 };

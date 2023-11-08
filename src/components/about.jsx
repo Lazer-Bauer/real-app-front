@@ -1,4 +1,4 @@
-import PageHeader from "./common/pageHeader";
+import PageHeader from "../common/pageHeader";
 
 const About = () => {
   return (

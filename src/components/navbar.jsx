@@ -1,5 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../contexts/auth.context";
 const Navbar = () => {
+  const { user } = useAuth();
   return (
     <nav
       className="navbar navbar-expand-sm navbar-light bg-light"
@@ -34,22 +36,38 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/About" className="nav-link">
+              <NavLink to="/my-cards" className="nav-link">
                 My Cards
               </NavLink>
             </li>
           </ul>
           <ul className="navbar-nav ms-auto mb-2 mb-sm-0">
-            <li className="nav-item">
-              <NavLink to="/sign-up" className="nav-link" href="#">
-                Sign up
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to={"/sign-in"} className="nav-link" href="#">
-                Sign in
-              </NavLink>
-            </li>
+            {user ? (
+              <li className="nav-item">
+                <NavLink to={"/sign-out"} className="nav-link">
+                  Sign out
+                </NavLink>
+              </li>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <NavLink to="/sign-up" className="nav-link" href="#">
+                    Sign up
+                  </NavLink>
+                </li>
+
+                <li className="nav-item">
+                  <NavLink to={"/sign-in"} className="nav-link" href="#">
+                    Sign in
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/sign-up-biz" className="nav-link">
+                    Sign Up Biz
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
